@@ -54,7 +54,7 @@ echo "net.ipv4.tcp_tw_reuse = 1" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_tw_recycle = 1" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_fin_timeout = 120" >> /etc/sysctl.conf
 echo "net.ipv4.ip_local_port_range = 1024  65000" >> /etc/sysctl.conf
-echo "net.ipv4.tcp_max_syn_backlog = 2048" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_max_syn_backlog = 4096" >> /etc/sysctl.conf
 
 # 使配置生效
 sysctl -p
