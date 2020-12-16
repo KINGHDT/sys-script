@@ -16,3 +16,9 @@ grep -n "${SKEY}" /root/.ssh/authorized_keys > /dev/null 2>&1
 if [ $? != 0 ]; then
     echo ${SKEY} >> /root/.ssh/authorized_keys
 fi
+
+#history 格式化
+grep -n "HISTTIMEFORMAT" /etc/profie > /dev/null
+if  [ $? != 0 ]; then
+    echo "export HISTTIMEFORMAT='[%F %T] '" >> /etc/profile
+fi
