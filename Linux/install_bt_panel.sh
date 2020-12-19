@@ -9,7 +9,7 @@ if [ -d /data ]; then
     mkdir /data/bt-panel
   fi
   `ls -l / | grep "www -> /data/bt-panel"` > /dev/null 2>&1
-  if [ $? = 0 ]; then
+  if [ $? != 0 ]; then
     ln -s /data/bt-panel /www
   fi
 elif [ ! -d /www ]; then

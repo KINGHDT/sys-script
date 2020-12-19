@@ -1,6 +1,6 @@
 #/bin/bash
 
-export GEC_HOME=/opt/gecchain
+export GEC_HOME=/data/chain_wallet/chain
 export APP_NAME=gec-chain.jar
 PID=`ps aux | grep -v grep | grep $APP_NAME | awk '{print $2}'`
 
@@ -15,13 +15,13 @@ function stop(){
 	PID=`ps aux | grep -v grep | grep $APP_NAME | awk '{print $2}'`
 	if [[ -n $PID ]]; then
 		kill -15 $PID
+		sleep 3
 		echo "$APP_NAME is stop."
 	fi
 }
 
 function restart(){
 	stop
-	sleep 3
 	start
 }
 
