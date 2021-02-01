@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+URL="https://gitee.com/oerbin/sys-script/raw/master/Linux/program/node_exporter-1.0.1.linux-amd64.tar.gz"
 # 下载node_exporter
 wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
 #解压缩

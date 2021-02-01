@@ -12,9 +12,11 @@ COUNTRY=`curl http://ip-api.com/json/?lang=zh-CN`
 COUNTRY=`echo $COUNTRY | sed 's/.*"country":"\(.*\)","countryCo.*/\1/g'`
 if [ $COUNTRY == "中国" ]; then
 	VER="191"
+	FILE_NAME=jdk-8u191-linux-x64.tar.gz
 	URL="https://repo.huaweicloud.com/java/jdk/8u191-b12/jdk-8u191-linux-x64.tar.gz"
 else
 	VER="212"
+	FILE_NAME=jdk-8u212-linux-x64.tar.gz
 	URL="https://github.com/frekele/oracle-java/releases/download/8u212-b10/jdk-8u212-linux-x64.tar.gz"
 fi
 echo "Now start download jdk-8u${VER}-linux-x64.tar.gz"
@@ -24,7 +26,7 @@ echo "Now start download jdk-8u${VER}-linux-x64.tar.gz"
 # wget https://repo.huaweicloud.com/java/jdk/8u191-b12/jdk-8u191-linux-x64.tar.gz
 # tar zxvf jdk-8u191-linux-x64.tar.gz -C /usr/local/
 wget $URL
-tar zxvf jdk-8u${VER}-linux-x64.tar.gz -C /usr/local/
+tar zxvf ${FILE_NAME} -C /usr/local
 # delete source file
 rm -rf jdk-8u191-linux-x64.tar.gz
 # 添加环境变量
