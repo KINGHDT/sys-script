@@ -1,24 +1,28 @@
 #/bin/bash
 
-export CHAIN_HOME=/data/chain/main
-export APP_NAME=yuu-chain.jar
-PID=`ps aux | grep -v grep | grep $APP_NAME | awk '{print $2}'`
+CHAIN_HOME=/data/chain
+APP_NAME=gec-chain.jar
+URL=http://127.0.0.1:7877
+FM_ADDR=Ao448d4891fa802c94a519131e90e0c398aee29ce8
+FM_PWD=y0QYuCjX
 
 function start(){
-	if [[ -z $PID ]];then
+	ps aux | grep -v grep | grep $APP_NAME > /dev/null
+	if [ $? != 0 ];then
 		cd $CHAIN_HOME
-		nohup java -jar $APP_NAME > /dev/nul 2>&1 &
+		nohup java -Xmx6g -Xms6g -jar $APP_NAME > /dev/nul  &
 		sleep 3
 		echo "$APP_NAME is start."
 	else
-		echo "$APP_NAME is running."
+		echo "$APP_NAME is already running."
 	fi
 }
 
 function stop(){
+	PID=`ps aux | grep -v grep | grep $APP_NAME | awk '{print $2}'`
 	if [[ -n $PID ]]; then
 		kill -15 $PID
-		sleep 3
+		sleep 5
 		echo "$APP_NAME is stop."
 	else
 		echo "$APP not running."
@@ -27,29 +31,37 @@ function stop(){
 
 function restart(){
 	stop
+	sleep 3
 	start
 }
-
-function clean1111(){
-	if [[ $PID ]]; then
-		echo "$APP_NAME is running, please stop first!"
-		exit
-	fi
-	cd $CHAIN_HOME
-	ls | grep -v "${APP_NAME}*" | xargs rm -rf
-	rm -rf /root/account
-}
-
-function logs(){
-	tail -f ${CHAIN_HOME}/springboot.log
-}
 function startfm(){
-	curl "http://127.0.0.1:7877/FoundryMachineController/startFoundryMachine?address=EC1631bdc42146bd58080bdfff93321712e96f6dca&passWord=4JXKFzqW"
+	curl "${URL}/FoundryMachineController/startFoundryMachine?address=${FM_ADDR}&passWord=${FM_PWD}"
 	echo ""
 }
 function stopfm(){
-	curl "http://127.0.0.1:7877/FoundryMachineController/stopFoundryMachine?address=EC1631bdc42146bd58080bdfff93321712e96f6dca&passWord=4JXKFzqW"
+	curl "${URL}/FoundryMachineController/stopFoundryMachine?address=${FM_ADDR}&passWord=${FM_PWD}"
 	echo ""
+}
+
+function bh(){
+	curl "${URL}/WalletController/getCurNodeBlockHeight"
+}
+
+function status(){
+	curl "${URL}/WalletController/getNodeState"
+}
+
+function statusfm(){
+	curl "${URL}/FoundryMachineController/noteFoundryMachineState"
+}
+
+function clean111(){
+	rm -r $CHAIN_HOME/*
+	rm -r /root/account
+}
+
+function logs(){
+	tail -50f ${CHAIN_HOME}/springboot.log
 }
 
 case $1 in
@@ -62,11 +74,17 @@ case $1 in
 "restart")
 	restart
 	;;
-"clean")
-	clean
-;;
 "logs")
 	logs
+;;
+"bh")
+	bh
+;;
+"status")
+	status
+;;
+"statusfm")
+	statusfm
 ;;
 "startfm")
 	startfm
@@ -74,6 +92,6 @@ case $1 in
 "stopfm")
 	stopfm
 	;;
-*) echo "${0##*/} start|stop|restart|startfm|stopfm"
+*) echo "${0##*/} start|stop|restart|startfm|stopfm|statusfm|bh|status"
 ;;
 esac
